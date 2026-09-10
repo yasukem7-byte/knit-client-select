@@ -1,0 +1,554 @@
+<title>KNITPEDIA テーマ選択</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600&display=swap">
+
+<style>
+:root {
+  --bg: #F0EDE8;
+  --surface: #FAFAF8;
+  --surface2: #FFFFFF;
+  --border: #DDD8D0;
+  --text: #1E1A17;
+  --text-muted: #6B6560;
+  --accent: #1A4A7A;
+  --accent-light: #E8F0F8;
+  --checked-bg: #EBF4E8;
+  --checked-border: #4A8A5A;
+  --checked-text: #2A5A35;
+  --tag-基礎知識: #EEF2FB;
+  --tag-基礎知識-text: #2A3F7A;
+  --tag-お手入れ・洗濯: #F0F8F4;
+  --tag-お手入れ・洗濯-text: #1A5E3A;
+  --tag-技術・ものづくり: #F5F0FA;
+  --tag-技術・ものづくり-text: #4A2A7A;
+  --tag-歴史・文化: #FDF5EC;
+  --tag-歴史・文化-text: #7A3A1A;
+  --tag-素材・選び方: #FDF0F4;
+  --tag-素材・選び方-text: #7A1A3A;
+  --tag-豆知識・雑学: #F5F8EC;
+  --tag-豆知識・雑学-text: #3A5A1A;
+  --pin-color: #B85020;
+  --star-color: #C8A020;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #181512;
+    --surface: #211E1A;
+    --surface2: #2A2620;
+    --border: #3A342C;
+    --text: #EDE8E2;
+    --text-muted: #9A9088;
+    --accent: #5A9ADA;
+    --accent-light: #1A2A3A;
+    --checked-bg: #1A2E1A;
+    --checked-border: #4A8A5A;
+    --checked-text: #7ACA8A;
+    --tag-基礎知識: #1A2040;
+    --tag-基礎知識-text: #8AAAEA;
+    --tag-お手入れ・洗濯: #1A2A20;
+    --tag-お手入れ・洗濯-text: #7ACAA0;
+    --tag-技術・ものづくり: #221A35;
+    --tag-技術・ものづくり-text: #AA8AEA;
+    --tag-歴史・文化: #2A1E10;
+    --tag-歴史・文化-text: #DAA07A;
+    --tag-素材・選び方: #2A1020;
+    --tag-素材・選び方-text: #DA8AAA;
+    --tag-豆知識・雑学: #1A2210;
+    --tag-豆知識・雑学-text: #AACA7A;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #181512;
+  --surface: #211E1A;
+  --surface2: #2A2620;
+  --border: #3A342C;
+  --text: #EDE8E2;
+  --text-muted: #9A9088;
+  --accent: #5A9ADA;
+  --accent-light: #1A2A3A;
+  --checked-bg: #1A2E1A;
+  --checked-border: #4A8A5A;
+  --checked-text: #7ACA8A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.header-logo {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.header-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.header-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-btn {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: #FFF; border-color: var(--accent); }
+
+.selected-count {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+.section-header {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  padding: 20px 0 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-count {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.theme-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+
+.theme-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.theme-item:hover { border-color: var(--accent); }
+
+.theme-item.checked {
+  background: var(--checked-bg);
+  border-color: var(--checked-border);
+}
+
+.theme-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  font-size: 13px;
+}
+
+.theme-item.checked .theme-checkbox {
+  background: var(--checked-border);
+  border-color: var(--checked-border);
+  color: #FFF;
+}
+
+.theme-body { flex: 1; min-width: 0; }
+
+.theme-title {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.theme-item.checked .theme-title { color: var(--checked-text); font-weight: 500; }
+
+.theme-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.cat-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pin-badge {
+  font-size: 11px;
+  color: var(--pin-color);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.stars {
+  font-size: 11px;
+  color: var(--star-color);
+  letter-spacing: -1px;
+}
+
+/* selected panel */
+.selected-panel {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface2);
+  border-top: 2px solid var(--checked-border);
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  z-index: 200;
+}
+
+.selected-panel.open {
+  max-height: 320px;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--checked-text);
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.panel-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--checked-text);
+  padding: 6px 10px;
+  background: var(--checked-bg);
+  border-radius: 6px;
+}
+
+.panel-item-num {
+  font-variant-numeric: tabular-nums;
+  color: var(--checked-border);
+  font-weight: 700;
+  font-size: 11px;
+  padding-top: 2px;
+  flex-shrink: 0;
+  min-width: 22px;
+}
+
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--checked-border);
+  color: #FFF;
+  border: none;
+  border-radius: 28px;
+  padding: 12px 20px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  z-index: 300;
+  transition: transform 0.15s;
+}
+
+.fab:hover { transform: translateY(-2px); }
+.fab.visible { display: flex; }
+
+.empty { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+.loading { padding: 60px; text-align: center; color: var(--text-muted); }
+
+.saved-msg {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--checked-border);
+  color: #FFF;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 400;
+}
+.saved-msg.show { opacity: 1; }
+</style>
+
+<div class="saved-msg" id="savedMsg">選択を保存しました</div>
+
+<header>
+  <div class="header-top">
+    <span class="header-logo">KNITPEDIA</span>
+    <span class="header-sub">記事テーマ選択</span>
+  </div>
+  <p class="header-desc">気になるテーマにチェックを入れてください。選択内容は自動で保存されます。</p>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all')">すべて</button>
+    <button class="filter-btn" onclick="setFilter('checked')">選択済み</button>
+    <button class="filter-btn" onclick="setFilter('基礎知識')">基礎知識</button>
+    <button class="filter-btn" onclick="setFilter('お手入れ・洗濯')">お手入れ</button>
+    <button class="filter-btn" onclick="setFilter('技術・ものづくり')">技術</button>
+    <button class="filter-btn" onclick="setFilter('歴史・文化')">歴史</button>
+    <button class="filter-btn" onclick="setFilter('素材・選び方')">素材</button>
+    <button class="filter-btn" onclick="setFilter('豆知識・雑学')">豆知識</button>
+    <span class="selected-count" id="selCount"></span>
+  </div>
+</header>
+
+<main id="mainContent">
+  <div class="loading">テーマを読み込み中...</div>
+</main>
+
+<button class="fab" id="fab" onclick="togglePanel()">
+  <span>✓</span>
+  <span id="fabCount">0</span>件 選択中
+</button>
+
+<div class="selected-panel" id="selPanel">
+  <div class="panel-header">
+    選択したテーマ <button class="panel-close" onclick="togglePanel()">×</button>
+  </div>
+  <div class="panel-list" id="panelList"></div>
+</div>
+
+<script>
+const THEMES = [{"id":1,"title":"そもそもの話　メリヤスってなんですか？","category":"基礎知識","stars":3,"pinned":true},{"id":2,"title":"ニットの種類色々　横編み（セーター）　丸編み（Tシャツ）　経編み（インナー）　ってなんですか？","category":"基礎知識","stars":3,"pinned":true},{"id":3,"title":"ニットにアイロンって大丈夫？　ニット種類別に対してのアイロンのかけ方。","category":"お手入れ・洗濯","stars":3,"pinned":true},{"id":4,"title":"世界のニット生産地マップ","category":"基礎知識","stars":3,"pinned":true},{"id":5,"title":"日本のニット生産地マップ","category":"基礎知識","stars":3,"pinned":true},{"id":6,"title":"ニットの値段はどう決まる？糸代・編み代・縫製代の内訳","category":"基礎知識","stars":3,"pinned":true},{"id":7,"title":"「カシミヤ混」は何％から高級になる？混率表示の読み方","category":"基礎知識","stars":3,"pinned":true},{"id":8,"title":"柔らかいニットほど傷みやすい？肌触りと耐久性の関係","category":"基礎知識","stars":3,"pinned":true},{"id":9,"title":"サザビーズで落札された高額ニット　数々のストーリー","category":"歴史・文化","stars":3,"pinned":false},{"id":10,"title":"屋根裏に40年、そして114万ドル。ダイアナ妃のセーターに何があった？","category":"歴史・文化","stars":3,"pinned":false},{"id":11,"title":"洗濯されていないカーディガンが33万4,000ドルで売れた理由","category":"歴史・文化","stars":3,"pinned":false},{"id":12,"title":"世界一高く売れたセーターは、なぜ114万ドルになった？","category":"歴史・文化","stars":3,"pinned":false},{"id":13,"title":"世界で最も有名なセーターはどれ？歴史を変えた5着","category":"歴史・文化","stars":3,"pinned":false},{"id":14,"title":"最新ニットテクノロジー最前線（MIT DefeXtiles・4D knit Dress・Harvard多安定性ニット）","category":"技術・ものづくり","stars":3,"pinned":false},{"id":15,"title":"黒いニットは実は難しい？色によって品質が変わる理由","category":"技術・ものづくり","stars":3,"pinned":false},{"id":16,"title":"売れたのに追加生産できない？ニット特有の\"糸切れ\"問題","category":"技術・ものづくり","stars":3,"pinned":false},{"id":17,"title":"ニットの原価が突然上がるのはなぜ？糸相場と価格の関係","category":"技術・ものづくり","stars":3,"pinned":false},{"id":18,"title":"3,000円と30,000円のニットは何が違う？","category":"技術・ものづくり","stars":3,"pinned":false},{"id":19,"title":"羊一頭の毛から、セーターは何着作れる？","category":"技術・ものづくり","stars":3,"pinned":false},{"id":20,"title":"カシミヤより希少なニット素材がある？","category":"技術・ものづくり","stars":3,"pinned":false},{"id":21,"title":"ニットを顕微鏡で見たら、毛玉の始まりが見えた。（ナイガイ研究所協力）","category":"技術・ものづくり","stars":3,"pinned":false},{"id":22,"title":"宇宙に飛んだのは「金色のニット」？人工衛星アンテナの秘密","category":"技術・ものづくり","stars":3,"pinned":false},{"id":23,"title":"値段が高いニットの秘密","category":"豆知識・雑学","stars":3,"pinned":false},{"id":24,"title":"薄いのに温かいニットはなにが違う？","category":"豆知識・雑学","stars":3,"pinned":false},{"id":25,"title":"世界でいちばん高価なウールは、どんな動物から採れる？","category":"豆知識・雑学","stars":3,"pinned":false},{"id":26,"title":"ニットの種類、多すぎ問題。いったい何が違う？","category":"豆知識・雑学","stars":3,"pinned":false},{"id":27,"title":"お腹の中に入れるニットがある？弱くなった組織を支えるために「サージカルメッシュ」とは？","category":"豆知識・雑学","stars":3,"pinned":false},{"id":28,"title":"55kgのニットが5トンを支える！未来の建築技術","category":"豆知識・雑学","stars":3,"pinned":false},{"id":29,"title":"エアバッグの中には「編み物」が入っている？","category":"豆知識・雑学","stars":3,"pinned":false},{"id":30,"title":"空を飛ぶニット？飛行機に隠された編み構造","category":"豆知識・雑学","stars":3,"pinned":false},{"id":31,"title":"世界で一番強いニットは何でできている？","category":"豆知識・雑学","stars":3,"pinned":false},{"id":32,"title":"横編みを徹底解説（天竺編み、リブ編み、ガーター編み、畦編み、ミラノリブ、ケーブル編み、ジャカード編み、インターシャ編み、透かし編み）","category":"基礎知識","stars":3,"pinned":false},{"id":33,"title":"試着室ではわからない？ニット購入後に起こりやすい変化","category":"基礎知識","stars":3,"pinned":false},{"id":34,"title":"コートとニットの相性が悪いと何が起こる？","category":"基礎知識","stars":3,"pinned":false},{"id":35,"title":"ニットについた化粧品はどう落とす？","category":"お手入れ・洗濯","stars":3,"pinned":false},{"id":36,"title":"スチームを当てるとニットがきれいになるのはなぜ？　スチームとニットの関係性","category":"お手入れ・洗濯","stars":3,"pinned":false},{"id":37,"title":"ニットとは？セーター・編み物・カットソーとの違い","category":"基礎知識","stars":2,"pinned":false},{"id":38,"title":"ハイゲージとローゲージの違いとは？見た目・暖かさ・着心地を比較","category":"基礎知識","stars":2,"pinned":false},{"id":39,"title":"ウール・アクリル・綿ニットの違いは？素材別の特徴と選び方","category":"素材・選び方","stars":2,"pinned":false},{"id":40,"title":"ニットは洗濯機で洗える？失敗しない洗い方と洗濯表示の見方","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":41,"title":"縮んだニットは元に戻せる？縮む原因と家庭でできる対処法","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":42,"title":"ニットが暖かいのはなぜ？編み目に隠された保温の仕組み","category":"基礎知識","stars":2,"pinned":false},{"id":43,"title":"カシミヤはなぜ高い？一般的なウールとの違いを解説","category":"素材・選び方","stars":2,"pinned":false},{"id":44,"title":"ニット製品ができるまで｜糸選びから編み立て・仕上げまで","category":"技術・ものづくり","stars":2,"pinned":false},{"id":45,"title":"ニットOEMとは？生産の流れ・ロット・費用の基礎知識","category":"技術・ものづくり","stars":2,"pinned":false},{"id":46,"title":"失敗しないニットの仕入れ方｜卸会社に相談する前の確認事項","category":"技術・ものづくり","stars":2,"pinned":false},{"id":47,"title":"ニットとは何？初心者にもわかる編み物の基本","category":"基礎知識","stars":2,"pinned":false},{"id":48,"title":"「ニット」と「セーター」は同じ？意外と知らない言葉の違い","category":"基礎知識","stars":2,"pinned":false},{"id":49,"title":"ニットとカットソーの違いとは？売り場で迷わない見分け方","category":"基礎知識","stars":2,"pinned":false},{"id":50,"title":"ニット生地はなぜ伸びる？織物との構造の違い","category":"基礎知識","stars":2,"pinned":false},{"id":51,"title":"天竺・リブ・スムースとは？代表的なニット生地を比較","category":"基礎知識","stars":2,"pinned":false},{"id":52,"title":"横編み・丸編み・経編みの違いをわかりやすく解説","category":"基礎知識","stars":2,"pinned":false},{"id":53,"title":"表編みと裏編みはどう違う？ニットの編み目の基本","category":"基礎知識","stars":2,"pinned":false},{"id":54,"title":"ニットの「度目」とは？風合いや品質を左右する重要なポイント","category":"基礎知識","stars":2,"pinned":false},{"id":55,"title":"ニットの糸番手とは？太さの見方と仕上がりの違い","category":"基礎知識","stars":2,"pinned":false},{"id":56,"title":"ニットの混率とは？品質表示から素材を読み解く方法","category":"基礎知識","stars":2,"pinned":false},{"id":57,"title":"ニットを長持ちさせる正しい洗い方｜自宅洗いの基本","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":58,"title":"ニットを洗濯すると縮むのはなぜ？原因と予防方法","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":59,"title":"ニットが伸びてしまったら？型崩れの直し方と防ぎ方","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":60,"title":"ニットの正しい干し方｜ハンガー干しがNGな理由","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":61,"title":"ニットは毎回洗うべき？適切な洗濯頻度とお手入れ方法","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":62,"title":"毛玉取り器でニットが傷む？安全な毛玉の取り方","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":63,"title":"ニットの静電気はなぜ起こる？素材別の対策方法","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":64,"title":"ニットの虫食いを防ぐには？正しい保管方法","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":65,"title":"衣替え前に確認！ニットを翌年もきれいに着る収納術","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":66,"title":"ニットについた臭いを取るには？洗わずにできるお手入れ","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":67,"title":"ニットに穴が開いたときは直せる？修理方法と費用の目安","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":68,"title":"クリーニングに出すべきニット・自宅で洗えるニットの違い","category":"お手入れ・洗濯","stars":2,"pinned":false},{"id":69,"title":"ウールとメリノウールの違いとは？肌触りや暖かさを比較","category":"素材・選び方","stars":2,"pinned":false},{"id":70,"title":"アクリルニットの特徴は？メリット・デメリットを解説","category":"素材・選び方","stars":2,"pinned":false},{"id":71,"title":"綿ニットはいつ着る？春夏にも使いやすい理由","category":"素材・選び方","stars":2,"pinned":false},{"id":72,"title":"カシミヤとウールの違い｜暖かさ・肌触り・価格を比較","category":"素材・選び方","stars":2,"pinned":false},{"id":73,"title":"モヘアニットとは？ふわふわした風合いの秘密","category":"素材・選び方","stars":2,"pinned":false},{"id":74,"title":"アルパカニットは暖かい？ウールやカシミヤとの違い","category":"素材・選び方","stars":2,"pinned":false},{"id":75,"title":"毛100％なら高品質？ニット選びで確認したいポイント","category":"素材・選び方","stars":2,"pinned":false},{"id":76,"title":"チクチクしにくいニット素材はどれ？敏感肌向けの選び方","category":"素材・選び方","stars":2,"pinned":false},{"id":77,"title":"暖かいニットの選び方｜素材・厚み・編み方で何が変わる？","category":"素材・選び方","stars":2,"pinned":false},{"id":78,"title":"春ニットと冬ニットの違いとは？素材と編み方を比較","category":"素材・選び方","stars":2,"pinned":false},{"id":79,"title":"サマーニットとは？暑い季節でも快適に着られる理由","category":"素材・選び方","stars":2,"pinned":false},{"id":80,"title":"家庭で扱いやすいニット素材は？お手入れのしやすさを比較","category":"素材・選び方","stars":2,"pinned":false},{"id":81,"title":"1枚のニットが完成するまで｜製造工程を写真で解説","category":"技術・ものづくり","stars":2,"pinned":false},{"id":82,"title":"ニットの編み機にはどんな種類がある？特徴と用途を紹介","category":"技術・ものづくり","stars":2,"pinned":false},{"id":83,"title":"ローゲージ・ミドルゲージ・ハイゲージを実物で比較","category":"技術・ものづくり","stars":2,"pinned":false},{"id":84,"title":"成型編みとは？裁断して作るニットとの違い","category":"技術・ものづくり","stars":2,"pinned":false},{"id":85,"title":"ホールガーメントとは？縫い目のないニットの仕組み","category":"技術・ものづくり","stars":2,"pinned":false},{"id":86,"title":"リンキングとは？ニットならではの縫製技術を解説","category":"技術・ものづくり","stars":2,"pinned":false},{"id":87,"title":"編み目を増やす・減らすとは？ニットの形を作る技術","category":"技術・ものづくり","stars":2,"pinned":false},{"id":88,"title":"ニットの柄はどうやって作る？ジャカード編みの仕組み","category":"技術・ものづくり","stars":2,"pinned":false},{"id":89,"title":"ケーブル編みはどう作られる？縄のような模様の秘密","category":"技術・ものづくり","stars":2,"pinned":false},{"id":90,"title":"編み地が斜めになるのはなぜ？ニットの斜行について","category":"技術・ものづくり","stars":2,"pinned":false},{"id":91,"title":"ニットの風合いを決める「仕上げ加工」とは？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":92,"title":"ニット製品の品質検査では何を見る？プロのチェック項目","category":"技術・ものづくり","stars":2,"pinned":false},{"id":93,"title":"ニットの不良には何がある？編み傷・糸切れ・目落ちを解説","category":"技術・ものづくり","stars":2,"pinned":false},{"id":94,"title":"同じ素材でも肌触りが違うのはなぜ？糸と加工の関係","category":"技術・ものづくり","stars":2,"pinned":false},{"id":95,"title":"ニットはいつ日本に伝わった？日本の編み物の歴史","category":"歴史・文化","stars":2,"pinned":false},{"id":96,"title":"セーターという名前の由来は？意外な誕生の物語","category":"歴史・文化","stars":2,"pinned":false},{"id":97,"title":"アランニットとは？模様に込められた意味と歴史","category":"歴史・文化","stars":2,"pinned":false},{"id":98,"title":"フェアアイルニットとは？色柄の特徴と発祥の地","category":"歴史・文化","stars":2,"pinned":false},{"id":99,"title":"ノルディック柄とは？冬を代表する模様のルーツ","category":"歴史・文化","stars":2,"pinned":false},{"id":100,"title":"フィッシャーマンニットはなぜ生まれた？漁師とニットの関係","category":"歴史・文化","stars":2,"pinned":false},{"id":101,"title":"カーディガンの名前は人名だった？誕生の歴史","category":"歴史・文化","stars":2,"pinned":false},{"id":102,"title":"ニット帽はいつからある？防寒具からファッションになるまで","category":"歴史・文化","stars":2,"pinned":false},{"id":103,"title":"軍服から定番服へ｜ニットがファッションに与えた影響","category":"歴史・文化","stars":2,"pinned":false},{"id":104,"title":"昔の人はどうやって糸を作った？紡績の歴史をたどる","category":"歴史・文化","stars":2,"pinned":false},{"id":105,"title":"ニットはなぜ暖かい？空気をためる編み目の秘密","category":"豆知識・雑学","stars":2,"pinned":false},{"id":106,"title":"ニットが重く感じるのはなぜ？素材と編み方の関係","category":"豆知識・雑学","stars":2,"pinned":false},{"id":107,"title":"同じウール100％でも価格が違うのはなぜ？","category":"豆知識・雑学","stars":2,"pinned":false},{"id":108,"title":"黒いニットだけホコリが目立つのはなぜ？","category":"豆知識・雑学","stars":2,"pinned":false},{"id":109,"title":"ニットを着ると静電気が起きやすい組み合わせとは？","category":"豆知識・雑学","stars":2,"pinned":false},{"id":110,"title":"犬や猫の毛がつきやすいニット・つきにくいニット","category":"豆知識・雑学","stars":2,"pinned":false},{"id":111,"title":"ニットは風を通しやすい？暖かさと通気性の不思議","category":"豆知識・雑学","stars":2,"pinned":false},{"id":112,"title":"ニットの袖口はなぜリブ編み？伸び縮みする仕組み","category":"豆知識・雑学","stars":2,"pinned":false},{"id":113,"title":"セーターの肩に跡がつくのはなぜ？ハンガー収納の注意点","category":"豆知識・雑学","stars":2,"pinned":false},{"id":114,"title":"高級ニットはどこが違う？プロが見る5つのポイント","category":"豆知識・雑学","stars":2,"pinned":false},{"id":115,"title":"ニットの重ね着で暖かさはどう変わる？","category":"豆知識・雑学","stars":2,"pinned":false},{"id":116,"title":"古いニットを捨てずに活用するリメイクアイデア","category":"豆知識・雑学","stars":2,"pinned":false},{"id":117,"title":"ニット卸とは？メーカー・問屋・小売店の役割を解説","category":"技術・ものづくり","stars":2,"pinned":false},{"id":118,"title":"ニット製品を卸から仕入れるメリットとは？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":119,"title":"ニットOEMの小ロットは何枚から？発注前に知りたい基礎知識","category":"技術・ものづくり","stars":2,"pinned":false},{"id":120,"title":"オリジナルニットを作るには？企画から納品までの流れ","category":"技術・ものづくり","stars":2,"pinned":false},{"id":121,"title":"ニットの原価はどう決まる？糸・ゲージ・加工・数量の関係","category":"技術・ものづくり","stars":2,"pinned":false},{"id":122,"title":"ニットOEMの見積もりに必要な情報とは？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":123,"title":"国内生産と海外生産の違い｜ニットOEMではどちらを選ぶ？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":124,"title":"ニットのサンプル作成とは？確認すべきポイントを解説","category":"技術・ものづくり","stars":2,"pinned":false},{"id":125,"title":"ニット製品の納期はどれくらい？生産スケジュールの基本","category":"技術・ものづくり","stars":2,"pinned":false},{"id":126,"title":"売れるニットを企画するには？素材・色・デザインの決め方","category":"技術・ものづくり","stars":2,"pinned":false},{"id":127,"title":"ニットの仕入れ で失敗しないための品質チェック","category":"技術・ものづくり","stars":2,"pinned":false},{"id":128,"title":"アパレルブランドがニット工場・卸会社を選ぶポイント","category":"技術・ものづくり","stars":2,"pinned":false},{"id":129,"title":"ニットは何度から着る？気温別に選ぶニットの厚さ","category":"基礎知識","stars":2,"pinned":false},{"id":130,"title":"ニットの下には何を着る？透け・汗・チクチクを防ぐインナー選び","category":"基礎知識","stars":2,"pinned":false},{"id":131,"title":"クルーネック・Vネック・タートルネック、似合う襟の選び方","category":"基礎知識","stars":2,"pinned":false},{"id":132,"title":"ニットの着丈はどこが正解？印象を左右する丈の選び方","category":"基礎知識","stars":2,"pinned":false},{"id":133,"title":"オーバーサイズニットをすっきり見せる着こなしのコツ","category":"基礎知識","stars":2,"pinned":false},{"id":134,"title":"ニットをインする？しない？きれいに見える着こなし方","category":"基礎知識","stars":2,"pinned":false},{"id":135,"title":"シャツとニットを重ねるときの襟・裾・袖の整え方","category":"基礎知識","stars":2,"pinned":false},{"id":136,"title":"ジャケットの下に着やすいニットの厚さとデザイン","category":"基礎知識","stars":2,"pinned":false},{"id":137,"title":"仕事に着ていけるニットとは？オフィス向けの選び方","category":"基礎知識","stars":2,"pinned":false},{"id":138,"title":"ニットベストはいつ着る？季節別レイヤード術","category":"基礎知識","stars":2,"pinned":false},{"id":139,"title":"ニットカーディガンのボタンはどこまで留める？","category":"基礎知識","stars":2,"pinned":false},{"id":140,"title":"大人っぽく見えるニットとカジュアルに見えるニットの違い","category":"基礎知識","stars":2,"pinned":false},{"id":141,"title":"ネット通販でニットを買うときに確認したいサイズ表の見方","category":"基礎知識","stars":2,"pinned":false},{"id":142,"title":"ニットの袖が長いのはなぜ？袖丈とシルエットの関係","category":"基礎知識","stars":2,"pinned":false},{"id":143,"title":"男女兼用ニットのサイズはどう選ぶ？ユニセックス商品の見方","category":"基礎知識","stars":2,"pinned":false},{"id":144,"title":"クルーネックとモックネックの違いとは？襟の種類を図解","category":"技術・ものづくり","stars":2,"pinned":false},{"id":145,"title":"ラグラン袖とセットイン袖の違い｜着心地と見え方を比較","category":"技術・ものづくり","stars":2,"pinned":false},{"id":146,"title":"ドロップショルダーとは？肩を落としたデザインが人気の理由","category":"技術・ものづくり","stars":2,"pinned":false},{"id":147,"title":"畦編みとは？立体的な編み目の特徴と魅力","category":"技術・ものづくり","stars":2,"pinned":false},{"id":148,"title":"ミラノリブとは？形が崩れにくい編み地の秘密","category":"技術・ものづくり","stars":2,"pinned":false},{"id":149,"title":"鹿の子編みとは？凹凸のある表情と通気性の特徴","category":"技術・ものづくり","stars":2,"pinned":false},{"id":150,"title":"ワッフル編みとは？お菓子のような編み柄が生まれる仕組み","category":"技術・ものづくり","stars":2,"pinned":false},{"id":151,"title":"透かし編みとは？模様と通気性を生み出す技法","category":"技術・ものづくり","stars":2,"pinned":false},{"id":152,"title":"総針ニットとは？目の詰まったきれいな表面の作り方","category":"技術・ものづくり","stars":2,"pinned":false},{"id":153,"title":"片畦と両畦はどう違う？厚み・伸縮性・見た目を比較","category":"技術・ものづくり","stars":2,"pinned":false},{"id":154,"title":"リブの幅で印象が変わる？細リブと太リブの違い","category":"技術・ものづくり","stars":2,"pinned":false},{"id":155,"title":"ニットの裾が丸まるのはなぜ？編み組織に隠された理由","category":"技術・ものづくり","stars":2,"pinned":false},{"id":156,"title":"配色ニットはどう設計する？色の切り替え方と編み方","category":"技術・ものづくり","stars":2,"pinned":false},{"id":157,"title":"立体的なニットはどう作る？凹凸を生み出す編み方","category":"技術・ものづくり","stars":2,"pinned":false},{"id":158,"title":"ニットの襟はどうやって取り付ける？首まわりの作り方","category":"技術・ものづくり","stars":2,"pinned":false},{"id":159,"title":"単糸と双糸の違いとは？ニットの見た目と耐久性への影響","category":"技術・ものづくり","stars":2,"pinned":false},{"id":160,"title":"糸の「撚り」とは？強撚・甘撚で風合いが変わる理由","category":"技術・ものづくり","stars":2,"pinned":false},{"id":161,"title":"紡毛糸と梳毛糸の違い｜ふくらみ・光沢・暖かさを比較","category":"技術・ものづくり","stars":2,"pinned":false},{"id":162,"title":"杢糸とは？複数の色が混ざって見える仕組み","category":"技術・ものづくり","stars":2,"pinned":false},{"id":163,"title":"段染め糸とは？編むだけで色が変化する糸の秘密","category":"技術・ものづくり","stars":2,"pinned":false},{"id":164,"title":"ネップヤーンとは？小さな粒を散りばめたような糸","category":"技術・ものづくり","stars":2,"pinned":false},{"id":165,"title":"スラブヤーンとは？太さの変化が表情を生む糸","category":"技術・ものづくり","stars":2,"pinned":false},{"id":166,"title":"ブークレヤーンとは？輪のあるふわふわした糸の特徴","category":"技術・ものづくり","stars":2,"pinned":false},{"id":167,"title":"モールヤーンとは？ベルベットのようなニットになる理由","category":"技術・ものづくり","stars":2,"pinned":false},{"id":168,"title":"テープヤーンとは？平たい糸で編むニットの特徴","category":"技術・ものづくり","stars":2,"pinned":false},{"id":169,"title":"ラメ糸はどう作られる？ニットに輝きを加える方法","category":"技術・ものづくり","stars":2,"pinned":false},{"id":170,"title":"ストレッチ糸とは？ニットの伸び戻りを支える素材","category":"技術・ものづくり","stars":2,"pinned":false},{"id":171,"title":"起毛糸とは？ふわっとした表面を作る加工方法","category":"技術・ものづくり","stars":2,"pinned":false},{"id":172,"title":"ファンシーヤーンとは？普通の糸にはない表情と種類","category":"技術・ものづくり","stars":2,"pinned":false},{"id":173,"title":"一本の糸ができるまで｜繊維からニット用の糸になる工程","category":"技術・ものづくり","stars":2,"pinned":false},{"id":174,"title":"ニットは糸の状態で染める？製品になってから染める？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":175,"title":"先染めと後染めの違いとは？色の見え方と生産方法を比較","category":"技術・ものづくり","stars":2,"pinned":false},{"id":176,"title":"同じ色を追加生産したのに違って見えるのはなぜ？染色ロットの話","category":"技術・ものづくり","stars":2,"pinned":false},{"id":177,"title":"黒いニットをきれいに染めるのは難しい？深い黒を作る技術","category":"技術・ものづくり","stars":2,"pinned":false},{"id":178,"title":"白にも種類がある？オフホワイト・生成り・アイボリーの違い","category":"技術・ものづくり","stars":2,"pinned":false},{"id":179,"title":"メランジカラーとは？複雑な色合いが生まれる仕組み","category":"技術・ものづくり","stars":2,"pinned":false},{"id":180,"title":"ニットの色は照明で変わって見える？色確認で注意したいこと","category":"技術・ものづくり","stars":2,"pinned":false},{"id":181,"title":"糸見本と完成品で色が違って見えるのはなぜ？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":182,"title":"ニットの配色は何色まで使える？色数と製造方法の関係","category":"技術・ものづくり","stars":2,"pinned":false},{"id":183,"title":"色落ちしやすいニットとは？染料と素材の関係","category":"技術・ものづくり","stars":2,"pinned":false},{"id":184,"title":"ビビッドカラーのニットを作るのが難しい素材とは？","category":"技術・ものづくり","stars":2,"pinned":false},{"id":185,"title":"定番色なのに奥深い｜グレーのニットができるまで","category":"技術・ものづくり","stars":2,"pinned":false},{"id":186,"title":"実はTシャツもニット？身近にある編み物を探してみよう","category":"豆知識・雑学","stars":2,"pinned":false},{"id":187,"title":"スウェット生地も編み物？裏毛・裏起毛の構造を解説","category":"豆知識・雑学","stars":2,"pinned":false},{"id":188,"title":"靴下はどうやってかかとの形を作る？靴下編みの仕組み","category":"豆知識・雑学","stars":2,"pinned":false}];
+
+const CAT_ORDER = ['基礎知識','お手入れ・洗濯','素材・選び方','技術・ものづくり','歴史・文化','豆知識・雑学'];
+let checkedIds = new Set();
+let currentFilter = 'all';
+let db = null;
+
+async function init() {
+  try {
+    db = await claude.use('db');
+    if (db) {
+      const doc = await db.doc('client/selections').get();
+      if (doc.exists) {
+        checkedIds = new Set(doc.data().ids || []);
+      }
+      db.doc('client/selections').onSnapshot(snap => {
+        if (snap.exists) {
+          checkedIds = new Set(snap.data().ids || []);
+          render();
+          updateUI();
+        }
+      });
+    }
+  } catch(e) {}
+  render();
+  updateUI();
+}
+
+async function toggle(id) {
+  if (checkedIds.has(id)) checkedIds.delete(id);
+  else checkedIds.add(id);
+  updateUI();
+  render();
+  if (db) {
+    try {
+      await db.doc('client/selections').set({ ids: [...checkedIds] });
+      showSaved();
+    } catch(e) {}
+  }
+}
+
+function showSaved() {
+  const m = document.getElementById('savedMsg');
+  m.classList.add('show');
+  setTimeout(() => m.classList.remove('show'), 1800);
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function getFiltered() {
+  if (currentFilter === 'checked') return THEMES.filter(t => checkedIds.has(t.id));
+  if (currentFilter === 'all') return THEMES;
+  return THEMES.filter(t => t.category === currentFilter);
+}
+
+function catStyle(cat) {
+  const safe = cat.replace(/[^a-zA-Z　-鿿゠-ヿ぀-ゟ・]/g,'');
+  return `background:var(--tag-${cat});color:var(--tag-${cat}-text,#555)`;
+}
+
+function render() {
+  const filtered = getFiltered();
+  const main = document.getElementById('mainContent');
+
+  if (filtered.length === 0) {
+    main.innerHTML = '<div class="empty">テーマがありません</div>';
+    return;
+  }
+
+  if (currentFilter !== 'all' && currentFilter !== 'checked') {
+    main.innerHTML = renderList(filtered);
+    return;
+  }
+
+  // Group by category
+  const pinned = filtered.filter(t => t.pinned);
+  const byCat = {};
+  CAT_ORDER.forEach(c => byCat[c] = []);
+  filtered.filter(t => !t.pinned).forEach(t => {
+    if (!byCat[t.category]) byCat[t.category] = [];
+    byCat[t.category].push(t);
+  });
+
+  let html = '';
+  if (pinned.length) {
+    html += `<div class="section-header">編集部おすすめ <span class="section-count">${pinned.length}件</span></div>`;
+    html += `<div class="theme-list">${pinned.map(itemHTML).join('')}</div>`;
+  }
+  CAT_ORDER.forEach(cat => {
+    const items = byCat[cat];
+    if (!items || !items.length) return;
+    html += `<div class="section-header">${cat} <span class="section-count">${items.length}件</span></div>`;
+    html += `<div class="theme-list">${items.map(itemHTML).join('')}</div>`;
+  });
+  main.innerHTML = html;
+}
+
+function renderList(items) {
+  return `<div class="theme-list">${items.map(itemHTML).join('')}</div>`;
+}
+
+function itemHTML(t) {
+  const checked = checkedIds.has(t.id);
+  const stars = '★'.repeat(t.stars) + '☆'.repeat(3 - t.stars);
+  return `<div class="theme-item${checked?' checked':''}" onclick="toggle(${t.id})">
+    <div class="theme-checkbox">${checked?'✓':''}</div>
+    <div class="theme-body">
+      <div class="theme-title">${t.title}</div>
+      <div class="theme-meta">
+        <span class="cat-tag" style="${catStyle(t.category)}">${t.category}</span>
+        ${t.pinned?'<span class="pin-badge">編集部推薦</span>':''}
+        <span class="stars">${stars}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function updateUI() {
+  const n = checkedIds.size;
+  document.getElementById('selCount').textContent = n ? `${n}件 選択中` : '';
+  document.getElementById('fabCount').textContent = n;
+  const fab = document.getElementById('fab');
+  if (n > 0) fab.classList.add('visible');
+  else { fab.classList.remove('visible'); document.getElementById('selPanel').classList.remove('open'); }
+  // update panel
+  const list = document.getElementById('panelList');
+  const sel = THEMES.filter(t => checkedIds.has(t.id));
+  list.innerHTML = sel.map((t,i) => `<div class="panel-item"><span class="panel-item-num">${i+1}</span><span>${t.title}</span></div>`).join('');
+}
+
+function togglePanel() {
+  document.getElementById('selPanel').classList.toggle('open');
+}
+
+init();
+</script>
